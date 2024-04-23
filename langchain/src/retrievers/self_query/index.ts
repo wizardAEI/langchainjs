@@ -41,7 +41,7 @@ export interface SelfQueryRetrieverArgs<T extends VectorStore>
  * implements the SelfQueryRetrieverArgs interface.
  * @example
  * ```typescript
- * const selfQueryRetriever = await SelfQueryRetriever.fromLLM({
+ * const selfQueryRetriever = SelfQueryRetriever.fromLLM({
  *   llm: new ChatOpenAI(),
  *   vectorStore: await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings()),
  *   documentContents: "Brief summary of a movie",
@@ -123,16 +123,12 @@ export class SelfQueryRetriever<T extends VectorStore>
       myQuery = generatedQuery;
     }
 
-    if (!filter) {
-      return [];
-    } else {
-      return this.vectorStore.similaritySearch(
-        myQuery,
-        this.searchParams?.k,
-        filter,
-        runManager?.getChild("vectorstore")
-      );
-    }
+    return this.vectorStore.similaritySearch(
+      myQuery,
+      this.searchParams?.k,
+      filter,
+      runManager?.getChild("vectorstore")
+    );
   }
 
   /**
